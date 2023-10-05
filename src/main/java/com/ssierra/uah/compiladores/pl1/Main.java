@@ -4,6 +4,8 @@
 
 package com.ssierra.uah.compiladores.pl1;
 
+import com.ssierra.uah.compiladores.pl1.util.Translator;
+
 /**
  *
  * @author ssierra
@@ -11,6 +13,10 @@ package com.ssierra.uah.compiladores.pl1;
 public class Main {
 
     public static void main(String[] args) {
-        System.out.println("Hello World!");
+
+        Translator.translate("Hello world");
+        System.out.println(Translator.translate("(ab)?c|b*[accba]"));
+
+
     }
 }

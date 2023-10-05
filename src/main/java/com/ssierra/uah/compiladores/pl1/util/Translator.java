@@ -4,6 +4,8 @@
  */
 package com.ssierra.uah.compiladores.pl1.util;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author ssierra
@@ -36,13 +38,141 @@ public class Translator {
 
      */
     
+    public static String getStringRepresentation(ArrayList<Character> list) {
+    
+        StringBuilder sb = new StringBuilder(list.size());
+        for(Character ch : list) {
+        
+            sb.append(ch);
+        
+        }
+        
+        return sb.toString();
+    
+    }
+    
     public static String translate(String inputStr) {
     
-        // To be modified.
+        ArrayList<String> operandList = new ArrayList<>();
+
+        for(int i = 0; i < inputStr.length(); i++) {
+                        
+            if (inputStr.charAt(i) == '(' || inputStr.charAt(i) == '[') {
+            
+                int j = i + 1;
+                boolean isSquared = inputStr.charAt(i) == '[';
+                ArrayList<Character> operand = new ArrayList<>();
+                while (inputStr.charAt(j) != ')' && inputStr.charAt(j) != ']') {
+                
+                    operand.add(inputStr.charAt(j));
+                    j++;
+                
+                }
+                
+                operandList.add(getStringRepresentation(operand));
+                if (isSquared) operandList.add("]");
+                i = j;
+                
+            } else {
+            
+                operandList.add(String.valueOf(inputStr.charAt(i)));
+            
+            }
+            
+        }
+        
+        for(int i = 0; i < operandList.size(); i++) {
+        
+            String str = operandList.get(i);
+            if (str.equals("]")) {
+                
+                String op = operandList.get(i - 1);
+                ArrayList<Character> charList = new ArrayList<>(); 
+                charList.add('(');
+                for (int j = 0; j < op.length(); j++) {
+                
+                    charList.add(op.charAt(j));
+                    if (j < op.length() - 1) charList.add('+');
+                
+                }
+                charList.add(')');
+                operandList.set(i - 1, getStringRepresentation(charList));
+                operandList.remove(i);
+
+                
+            }
+        
+        }
+
+        for(int i = 0; i < operandList.size(); i++) {
+        
+            String str = operandList.get(i);
+            if (str.equals("?")) {
+                
+                String op = operandList.get(i - 1);
+                op = "(!+" + op + ")";
+                operandList.set(i - 1, op);
+                operandList.remove(i);
+
+                
+            }
+        
+        }
+        
+        for(int i = 0; i < operandList.size(); i++) {
+        
+            String str = operandList.get(i);
+            if (str.equals("+")) {
+                
+                String op = operandList.get(i - 1);
+                op = op + "(!+" + op + ")";
+                operandList.set(i - 1, op);
+                operandList.remove(i);
+
+                
+            }
+        
+        }
+        
+        for(int i = 0; i < operandList.size(); i++) {
+        
+            String str = operandList.get(i);
+            if (str.equals("*")) {
+                
+                String op = operandList.get(i - 1);
+                op = op.length() > 1 ? "(" + op + ")*" : op + "*";
+                operandList.set(i - 1, op);
+                operandList.remove(i);
+
+                
+            }
+        
+        }
+        
+        String result = "";
+        
+        for(String str : operandList) {
+        
+            result += str;
+        
+        }
+        
+        char[] ch = result.toCharArray();
+        
+        for (int i = 0; i < ch.length; i++) {
+        
+            if (ch[i] == '|') {
+            
+                ch[i] = '+';
+            
+            }
+        
+        }
+        
         // Translate + symbol: a+ -> a(!+a)
         
         
-        return new String();
+        return String.valueOf(ch);
     
     }
     
