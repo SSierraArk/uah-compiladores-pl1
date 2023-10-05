@@ -15,7 +15,7 @@ public class Main {
     public static void main(String[] args) {
 
         Translator.translate("Hello world");
-        System.out.println(Translator.translate("(ab)?c|b*[accba]"));
+        System.out.println(Translator.translate("(abc)+bba*"));
 
 
     }
