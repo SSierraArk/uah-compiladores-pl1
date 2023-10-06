@@ -13,15 +13,40 @@ import java.util.HashMap;
 public class State {
     
     protected HashMap<Character,Integer> delta;
+    protected boolean isFinal = false;
 
     public State(HashMap<Character, Integer> delta) {
         this.delta = delta;
     }
     
+    public boolean isFinal() {
+    
+        return isFinal;
+    
+    }
+    
+    public void setFinal() {
+    
+        isFinal = true;
+    
+    }
+    
     public int next(char input) {
     
+        if (!delta.containsKey(input)) {
+        
+            return -1;
+            
+        }
+        
         return delta.get(input);
         
+    }
+    
+    public HashMap<Character, Integer> getDelta() {
+    
+        return delta;
+    
     }
         
 }

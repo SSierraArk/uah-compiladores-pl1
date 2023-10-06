@@ -25,6 +25,16 @@ public class Automaton {
         
     }
     
+    /**
+     * Creates an Automaton object from a given state matrix. <br>
+     * 
+     * This matrix must use the "," character as a column separator and ";"
+     * for rows.
+     * The first entry within the matrix is assumed to be the initial state.
+     * 
+     * @param inputAlphabet
+     * @param stateMatrix 
+     */
     public Automaton(String inputAlphabet, String stateMatrix) {
     
     
@@ -55,15 +65,51 @@ public class Automaton {
     
     }
     
+    /**
+     * Returns the current state object.
+     * @return 
+     */
     public State getCurrentState() {
     
         return this.currentState;
     
     }
     
+    /**
+     * Returns current state index.
+     * @return 
+     */
     public int current() {
     
         return this.stateList.indexOf(currentState);
+    
+    }
+    
+    /**
+     * Sets the i-th state within the stateList as being a final state.
+     * @param index 
+     */
+    public void setFinal(int index) {
+    
+        stateList.get(index).setFinal();
+    
+    }
+    
+    /**
+     * Transitions to the following state based on a given input.
+     * Does nothing if not defined within the transition function.
+     * @param inputChar
+     * @return 
+     */
+    public int next(char inputChar) {
+    
+        int index = currentState.next(inputChar);
+        
+        currentState = index >= 0
+                ? stateList.get(currentState.next(inputChar)) 
+                : currentState;
+        
+        return index;
     
     }
     
