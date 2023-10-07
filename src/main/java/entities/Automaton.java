@@ -96,6 +96,21 @@ public class Automaton {
     }
     
     /**
+     * Sets i-th states within the stateList as being a final state. <br>
+     * From a given array of indices.
+     * @param index 
+     */
+    public void setFinal(int[] indices) {
+    
+        for (int index : indices) {
+        
+            stateList.get(index).setFinal();
+        
+        }
+    
+    }
+    
+    /**
      * Transitions to the following state based on a given input.
      * Does nothing if not defined within the transition function.
      * @param inputChar
