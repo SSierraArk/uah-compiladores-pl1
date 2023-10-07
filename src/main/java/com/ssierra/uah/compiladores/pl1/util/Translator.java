@@ -125,7 +125,7 @@ public class Translator {
             if (str.equals("+")) {
                 
                 String op = operandList.get(i - 1);
-                op = op.length() > 1 ? "(" + op + ")(!+(" + op + "))" : op + "(!+" + op + ")";
+                op = op.length() > 1 ? "(" + op + ")(!+(" + op + "))*" : op + "(!+" + op + ")*";
                 operandList.set(i - 1, op);
                 operandList.remove(i);
 
