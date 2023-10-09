@@ -128,6 +128,12 @@ public class Automaton {
     
     }
     
+    
+    public boolean check(String input) {
+
+        
+        return false;
+    }
         
     
 }
