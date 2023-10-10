@@ -287,7 +287,7 @@ public class Automaton {
     }
     
     /**
-     * Spans all valid strings with lengths growing up to a given limit.
+     * Spans all valid strings with lengSths growing up to a given limit.
      * @param lengthLim
      * @return 
      */
