@@ -66,6 +66,78 @@ public class Automaton {
     }
     
     /**
+     * Creates an Automaton object from a given state matrix. <br>
+     * 
+     * This matrix must use the "," character as a column separator and ";"
+     * for rows.
+     * The first entry within the matrix is assumed to be the initial state.
+     * 
+     * @param inputAlphabet
+     * @param stateMatrix 
+     */
+    public Automaton(String inputAlphabet, String stateMatrix, int[] finalStates) {
+    
+    
+        this.inputAlphabet = inputAlphabet;
+        
+        ArrayList<State> stateList = new ArrayList<>();
+        int[][] matrix = MatrixParser.parseMatrix(stateMatrix);
+        
+        // Iterate rows
+        for (int[] row : matrix) {
+        
+            HashMap<Character, Integer> hm =  new HashMap<>();
+            
+            for (int i = 0; i < row.length; i++) {
+            
+                hm.put(inputAlphabet.charAt(i), row[i]);
+            
+            }
+            
+            stateList.add(new State(hm));
+            
+        
+        }
+        
+        this.stateList = stateList;
+        this.currentState = stateList.get(0);
+        this.setFinal(finalStates);
+        
+    
+    }
+    
+    public Automaton(String inputAlphabet, String stateMatrix, int finalState) {
+    
+    
+        this.inputAlphabet = inputAlphabet;
+        
+        ArrayList<State> stateList = new ArrayList<>();
+        int[][] matrix = MatrixParser.parseMatrix(stateMatrix);
+        
+        // Iterate rows
+        for (int[] row : matrix) {
+        
+            HashMap<Character, Integer> hm =  new HashMap<>();
+            
+            for (int i = 0; i < row.length; i++) {
+            
+                hm.put(inputAlphabet.charAt(i), row[i]);
+            
+            }
+            
+            stateList.add(new State(hm));
+            
+        
+        }
+        
+        this.stateList = stateList;
+        this.currentState = stateList.get(0);
+        this.setFinal(finalState);
+        
+    
+    }
+    
+    /**
      * Returns the current state object.
      * @return 
      */
@@ -128,11 +200,61 @@ public class Automaton {
     
     }
     
+    public int seek(char inputChar) {
     
-    public boolean check(String input) {
+        return currentState.next(inputChar);
+    }
+    
+    public String[] spanAlphabet(int length) {
+    
+        int dim = (int) Math.pow(this.inputAlphabet.length(), length);
+        String[] out = new String[dim];
+        // StringBuilder sb = new StringBuilder();
 
         
-        return false;
+        
+        for (int i = 0; i < dim; i++) {
+
+            out[i] += inputAlphabet.charAt(i%3);
+            System.out.println(out[i]);
+
+        }
+
+        return out;
+        
+    }
+    
+    /**
+     * Spans all valid strings within a given limit.
+     * @param limit
+     * @return 
+     */
+    public String[] span(int limit) {
+    
+        
+        
+        return new String[0];
+    
+    }
+    
+    
+    public boolean validate(String input) {
+
+        char[] inputArr = input.toCharArray();
+        boolean isValid = true;
+        int counter = 0;
+        
+        while (isValid && counter < inputArr.length) {
+        
+            if (this.next(inputArr[counter++]) < 0) {
+            
+                isValid = false;
+            
+            }
+        
+        }
+        
+        return isValid && currentState.isFinal();
     }
         
     

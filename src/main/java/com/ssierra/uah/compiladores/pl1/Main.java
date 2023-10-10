@@ -4,7 +4,7 @@
 
 package com.ssierra.uah.compiladores.pl1;
 
-import com.ssierra.uah.compiladores.pl1.util.Translator;
+import entities.Automaton;
 
 /**
  *
@@ -14,8 +14,13 @@ public class Main {
 
     public static void main(String[] args) {
 
-        Translator.translate("Hello world");
-        System.out.println(Translator.translate("(abc)+bba*"));
+        Automaton automaton = new Automaton("abc", "1,-1,2;-1,-1,2;4,3,4;2,-1,-1;-1,-1,-1", 4);
+        automaton.spanAlphabet(10);
+        
+        Automaton automaton_regex2 = new Automaton("abc", "1,-1,-1;-1,2,-1;-1,-1,3;1,4,-1;-1,5,-1;5,-1,-1", 5);
+        
+        System.out.println("Validating RegEx I: " + automaton.validate("acc"));
+        System.out.println("Validating RegEx II: " + automaton_regex2.validate("abcbb"));
 
 
     }
