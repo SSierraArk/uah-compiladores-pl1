@@ -183,6 +183,25 @@ public class Automaton {
     }
     
     /**
+     * Returns the automaton to its initial state.
+     */
+    public void reset() {
+    
+        this.currentState = stateList.get(0);
+    
+    }
+    
+    /**
+     * 
+     * @param index 
+     */
+    public void setCurrentState(int index) {
+    
+        this.currentState = stateList.get(index);
+    
+    }
+    
+    /**
      * Transitions to the following state based on a given input.
      * Does nothing if not defined within the transition function.
      * @param inputChar
@@ -209,32 +228,79 @@ public class Automaton {
     
         int dim = (int) Math.pow(this.inputAlphabet.length(), length);
         String[] out = new String[dim];
-        // StringBuilder sb = new StringBuilder();
 
+        // Initialise each entry for the below code to work as expected.
+        for (int i = 0; i < dim; i++) out[i] = "";
         
-        
-        for (int i = 0; i < dim; i++) {
-
-            out[i] += inputAlphabet.charAt(i%3);
-            System.out.println(out[i]);
-
+        for (int j = 0; j < length; j++) {
+            
+            int intervalLength = (int) Math.pow(this.inputAlphabet.length(), length - j - 1);
+            
+            for (int i = 0; i < dim; i++) {
+                
+                
+                out[i] += inputAlphabet.charAt(((int) i/intervalLength)%3);
+            }
         }
-
+        
         return out;
         
     }
     
     /**
-     * Spans all valid strings within a given limit.
-     * @param limit
+     * Spans all valid strings for a given output length.
+     * @param length
      * @return 
      */
-    public String[] span(int limit) {
+    public ArrayList<String> span(int length) {
     
+        ArrayList<String> out = new ArrayList<>();
+        String[] alpha = this.spanAlphabet(length);
+        
+        for (String elem : alpha) {
+            
+            if (this.validate(elem)) out.add(elem);
+        }
+        
+        return out;
+    
+    }
+    
+    public ArrayList<String> span(int length, int limit) {
+    
+        ArrayList<String> out = new ArrayList<>();
+        String[] alpha = this.spanAlphabet(length);
+
+        int i = 0;
+        while (i < alpha.length && out.size() <= limit) {
         
         
-        return new String[0];
+            if (this.validate(alpha[i])) out.add(alpha[i]);
+            i++;
+        
+        }
+
     
+        
+        return out;
+    
+    }
+    
+    /**
+     * Spans all valid strings with lengths growing up to a given limit.
+     * @param lengthLim
+     * @return 
+     */
+    public ArrayList<String> spanUntil(int lengthLim) {
+    
+        ArrayList<String> out = new ArrayList<>();
+        for (int i = 1; i <= lengthLim; i++) {
+        
+            out.addAll(this.span(i));
+        
+        }
+    
+        return out;
     }
     
     
@@ -243,6 +309,7 @@ public class Automaton {
         char[] inputArr = input.toCharArray();
         boolean isValid = true;
         int counter = 0;
+        boolean isFinal;
         
         while (isValid && counter < inputArr.length) {
         
@@ -254,7 +321,10 @@ public class Automaton {
         
         }
         
-        return isValid && currentState.isFinal();
+        isFinal = currentState.isFinal();
+        this.reset();
+        
+        return isValid && isFinal;
     }
         
     
